@@ -1,5 +1,17 @@
 version: 2.1
 
+orbs:
+  slack: circleci/slack@4.10.1
+
+commands:
+  slack-notify:
+    description: Send alert notifications to slack when there is a job failure.
+    steps:
+      - slack/notify:
+          channel: udapeople-alerts
+          event: fail
+          template: basic_fail_1
+
 jobs:
   build-frontend:
     docker:
@@ -11,12 +23,14 @@ jobs:
       - run:
           name: Build front-end
           command: |
-            cd frontend
-            npm i
-            npm run build
+            # cd frontend
+            # npm i
+            # npm run build
+            exit 1
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
+      - slack-notify
 
   build-backend:
     docker:
@@ -34,6 +48,7 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
+      - slack-notify
 
   test-frontend:
     docker:
@@ -48,6 +63,7 @@ jobs:
             cd frontend
             npm i 
             npm run test
+      - slack-notify
 
   test-backend:
     docker:
@@ -62,6 +78,7 @@ jobs:
             cd backend
             npm i 
             npm run test
+      - slack-notify
 
   scan-frontend:
     docker:
@@ -76,6 +93,7 @@ jobs:
             cd frontend
             npm i 
             npm audit fix --audit-level=critical --force
+      - slack-notify
 
   scan-backend:
     docker:
@@ -90,6 +108,7 @@ jobs:
             cd backend
             npm i 
             npm audit fix --audit-level=critical --force
+      - slack-notify
 
 workflows:
   default:
