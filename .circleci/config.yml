@@ -9,8 +9,7 @@ commands:
       - run:
           name: Destroy backend
           when: on_fail
-          command: aws cloudformation delete-stack \
-            --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+          command: aws cloudformation delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
 
   slack-notify:
     description: Send alert notifications to slack when there is a job failure.
@@ -122,6 +121,10 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
+      - run:
+          name: Install tar utility
+          command: |
+            yum install -y tar gzip
       - run:
           name: Ensure back-end infrastructure exists
           command: |
