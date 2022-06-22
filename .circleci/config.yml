@@ -173,10 +173,10 @@ jobs:
       #       ansible-playbook -i inventory main.yml
       - attach_workspace:
           at: ~/
-      - run:
-          name: Install dependencies
-          command: |
-            apk add --no-cache aws-cli
+      # - run:
+      #     name: Install dependencies
+      #     command: |
+      #       apk add --no-cache aws-cli
       - run:
           name: Configure server
           command: |
