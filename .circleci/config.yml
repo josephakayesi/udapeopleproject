@@ -167,10 +167,10 @@ jobs:
           name: Install Ansible
           command: |
             apk add --update ansible
-      - run:
-          name: Configure server
-          command: |
-            ansible-playbook -i inventory main.yml
+      # - run:
+      #     name: Configure server
+      #     command: |
+      #       ansible-playbook -i inventory main.yml
       - attach_workspace:
           at: ~/
       - run:
