@@ -33,5 +33,5 @@
 
   roles:
     - upgrade-packages
-    - install node-deps
+    - install-node-deps
     - install-python

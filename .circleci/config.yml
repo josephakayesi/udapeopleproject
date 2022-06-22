@@ -144,7 +144,7 @@ jobs:
       - run:
           name: Add back-end ip to ansible inventory
           command: |
-            aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters "Name=tag:Name,Values=UdapeopleServer" --output text >> inventory.txt
+            aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" --output text >> inventory.txt
       - persist_to_workspace:
           root: ~/
           paths:
@@ -163,6 +163,8 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - '79:5f:ed:fb:19:46:e6:c1:19:ea:ef:cd:f9:8f:3f:6f'
+      - attach_workspace:
+          at: ~/
       - run:
           name: Install Ansible
           command: |
@@ -171,8 +173,7 @@ jobs:
       #     name: Configure server
       #     command: |
       #       ansible-playbook -i inventory main.yml
-      - attach_workspace:
-          at: ~/
+
       # - run:
       #     name: Install dependencies
       #     command: |
