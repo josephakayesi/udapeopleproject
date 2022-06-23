@@ -190,7 +190,7 @@ jobs:
 
   run-migrations:
     docker:
-      - image: node:slim
+      - image: node:lts-slim
     steps:
       - checkout
       - run:
