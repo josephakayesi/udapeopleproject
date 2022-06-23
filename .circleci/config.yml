@@ -198,13 +198,10 @@ jobs:
           command: |
             cd backend
             npm i 
-            npm run migrations > migrations_dump.txt
-            ls
+            npm run migrations > migrations_dump.txt > migrations_dump.txt
       - run:
           name: Send migration results to kvdb
           command: |
-            pwd
-            ls
             if grep -q "has been executed successfully." backend/migrations_dump.txt
             then
               curl https://kvdb.io/BtyGwTRQwxKEHw8w8deLz3/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
