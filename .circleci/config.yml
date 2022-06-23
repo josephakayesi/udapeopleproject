@@ -205,7 +205,7 @@ jobs:
           command: |
             pwd
             ls
-            if grep -q "has been executed successfully." migrations_dump.txt
+            if grep -q "has been executed successfully." backend/migrations_dump.txt
             then
               curl https://kvdb.io/BtyGwTRQwxKEHw8w8deLz3/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
             fi
