@@ -72,3 +72,5 @@ dist
 infra
 backend/node_modules
 backend/.env
+backend/t.sh
+backend/migrations_dump.txt
