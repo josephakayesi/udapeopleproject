@@ -181,15 +181,6 @@ jobs:
           name: Install Ansible
           command: |
             apk add --update ansible
-      # - run:
-      #     name: Configure server
-      #     command: |
-      #       ansible-playbook -i inventory main.yml
-
-      # - run:
-      #     name: Install dependencies
-      #     command: |
-      #       apk add --no-cache aws-cli
       - run:
           name: Configure server
           command: |
@@ -219,6 +210,43 @@ jobs:
               curl https://kvdb.io/BtyGwTRQwxKEHw8w8deLz3/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
             fi
       - destroy_environment
+
+  deploy-frontend:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Install dependencies
+          command: |
+            curl -sL https://rpm.nodesource.com/setup_10.x | sudo bash -
+            sudo yum install nodejs -y
+            sudo dnf install python3 -y
+      - run:
+          name: Install dependencies
+          command: |
+            yum install -y tar gzip
+      - run:
+          name: Get backend url
+          command: |
+            export BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" --output text)
+            export API_URL="http://${BACKEND_IP}:3030"
+            echo "${API_URL}"
+            echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
+            cat frontend/.env
+      - run:
+          name: Deploy frontend objects
+          command: |
+            cd frontend
+            npm i 
+            npm run build
+            tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
+            aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
+      - slack-notify
+      - destroy_environment
+      - revert-migrations
 
 workflows:
   default:
