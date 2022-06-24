@@ -1,15 +1,20 @@
 ---
+- name: Creates app firectory
+  file:
+    path: ~/app
+    state: directory
+
 - name: 'extract zipped backend'
   become: yes
   unarchive:
     copy: True
-    src: artifact.tar.gz
-    dest: ~/backend
+    src: ~/project/artifact.tar.gz
+    dest: ~/app
 
 - name: 'run node application'
   become: yes
   raw: |
-    cd ~/backend
+    cd ~/app
     npm i 
     pm2 stop default
     pm2 start npm -- start

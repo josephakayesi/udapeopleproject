@@ -260,7 +260,7 @@ jobs:
       - run:
           name: Install tar and gzip
           command: |
-            yum install -y tar gzip
+            apk add tar gzip
       - add_ssh_keys:
           fingerprints:
             - '79:5f:ed:fb:19:46:e6:c1:19:ea:ef:cd:f9:8f:3f:6f'
@@ -269,8 +269,8 @@ jobs:
       - run:
           name: Install node and python dependencies
           command: |
-            curl -sL https://rpm.nodesource.com/setup_16.x | bash -
-            yum install nodejs -y
+            apk add curl bash
+            apk add --update nodejs npm
             # yum install python3 -y
       - run:
           name: Install Ansible
