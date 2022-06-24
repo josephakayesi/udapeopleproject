@@ -252,11 +252,11 @@ jobs:
     docker:
       - image: python:3.7-alpine3.11
     steps:
-     - checkout
-    - run:
-        name: Install SSH
-        command: |
-          apk add openssh
+      - checkout
+      - run:
+          name: Install SSH
+          command: |
+            apk add openssh
       - run:
           name: Install tar and gzip
           command: |
