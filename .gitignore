@@ -70,3 +70,5 @@ node_modules
 dist
 
 infra
+backend/node_modules
+backend/.env
