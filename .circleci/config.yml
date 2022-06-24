@@ -248,6 +248,48 @@ jobs:
       - destroy_environment
       - revert-migrations
 
+  deploy-backend:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+     - checkout
+      - run:
+          name: Install SSH
+          command: |
+            apk add openssh
+      - run:
+          name: Install tar and gzip
+          command: |
+            yum install -y tar gzip
+      - add_ssh_keys:
+          fingerprints:
+            - '79:5f:ed:fb:19:46:e6:c1:19:ea:ef:cd:f9:8f:3f:6f'
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Install node and python dependencies
+          command: |
+            curl -sL https://rpm.nodesource.com/setup_16.x | bash -
+            yum install nodejs -y
+            # yum install python3 -y
+      - run:
+          name: Install Ansible
+          command: |
+            apk add --update ansible
+
+      - run:
+          name: Deploy backend
+          command: |
+            cd backend
+            npm i
+            npm run build
+            cd ..
+            tar -C backend -czvf artifact.tar.gz .
+            cd .circleci/ansible
+            echo "Contents  of the inventory.txt file is -------"
+            cat inventory.txt
+            ansible-playbook -i inventory.txt deploy-backend.yml
+
 workflows:
   default:
     jobs:
