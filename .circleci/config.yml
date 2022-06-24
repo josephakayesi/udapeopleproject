@@ -219,15 +219,15 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
-          name: Install dependencies
-          command: |
-            curl -sL https://rpm.nodesource.com/setup_10.x | sudo bash -
-            sudo yum install nodejs -y
-            sudo dnf install python3 -y
-      - run:
-          name: Install dependencies
+          name: Install tar and gzip
           command: |
             yum install -y tar gzip
+      - run:
+          name: Install node and python dependencies
+          command: |
+            curl -sL https://rpm.nodesource.com/setup_16.x | bash -
+            yum install nodejs -y
+            # yum install python3 -y
       - run:
           name: Get backend url
           command: |
