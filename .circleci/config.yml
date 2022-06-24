@@ -253,10 +253,10 @@ jobs:
       - image: python:3.7-alpine3.11
     steps:
      - checkout
-      - run:
-          name: Install SSH
-          command: |
-            apk add openssh
+    - run:
+        name: Install SSH
+        command: |
+          apk add openssh
       - run:
           name: Install tar and gzip
           command: |
@@ -313,4 +313,6 @@ workflows:
       - run-migrations:
           requires: [configure-infrastructure]
       - deploy-frontend:
+          requires: [run-migrations]
+      - deploy-backend:
           requires: [run-migrations]
