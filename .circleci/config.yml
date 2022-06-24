@@ -197,8 +197,8 @@ jobs:
           name: Run migrations
           command: |
             cd backend
-            npm i 
-            npm run migrations > migrations_dump.txt > migrations_dump.txt
+            npm i
+            npm run migrations > migrations_dump.txt
       - run:
           name: Send migration results to kvdb
           command: |
