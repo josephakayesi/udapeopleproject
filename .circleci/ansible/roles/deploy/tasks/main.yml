@@ -6,7 +6,7 @@
     src: artifact.tar.gz
     dest: ~/backend
 
-- name: 'run application'
+- name: 'run node application'
   become: yes
   raw: |
     cd ~/backend
