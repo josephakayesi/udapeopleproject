@@ -1,16 +1,15 @@
 ---
 - name: 'extract zipped backend'
   become: yes
-    copy:
-      src: ~/project/artifact.tar.gz
-      dest: ~/app/artifact.tar.gz
+  copy:
+    src: ~/project/artifact.tar.gz
+    dest: /home/ubuntu/artifact.tar.gz
 
 - name: 'run node application'
   become: yes
-  raw: |
-    cd ~/app
-    tar xzvf backend.tar.gz
-    cd backend
+  shell: |
+    cd /home/ubuntu
+    tar xzvf artifact.tar.gz 
     npm i 
     npm run build
     pm2 stop default
