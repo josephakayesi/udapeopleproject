@@ -280,7 +280,6 @@ jobs:
       - run:
           name: Deploy backend
           command: |
-            printenv
             cd backend
             npm i
             npm run build
@@ -289,6 +288,7 @@ jobs:
             cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
+            printenv
             ansible-playbook -i inventory.txt deploy-backend.yml
       - slack-notify
       - destroy_environment
