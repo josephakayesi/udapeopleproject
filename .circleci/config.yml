@@ -280,6 +280,7 @@ jobs:
       - run:
           name: Deploy backend
           command: |
+            printenv
             cd backend
             npm i
             npm run build
