@@ -15,9 +15,9 @@ commands:
           when: on_fail
           command: |
             echo "Destroying environment: << parameters.workflow_id >> "
-            aws cloudformation delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-            aws s3 rb s3://dapeople-${CIRCLE_WORKFLOW_ID:0:7} --force
-            aws cloudformation delete-stack --stack-name "udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
+            aws cloudformation delete-stack --stack-name "udapeople-backend-<< parameters.workflow_id >>" \
+            aws s3 rb s3://udapeople-<< parameters.workflow_id >> --force
+            aws cloudformation delete-stack --stack-name "udapeople-<< parameters.workflow_id >>" \
 
   slack-notify:
     description: Send alert notifications to slack when there is a job failure.
@@ -169,7 +169,9 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
-      - destroy_environment
+      - destroy_environment:
+          parameters:
+            workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   configure-infrastructure:
     docker:
