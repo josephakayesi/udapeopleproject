@@ -360,6 +360,9 @@ jobs:
             else
               exit 1
             fi
+      - slack-notify
+      - destroy_environment
+      - revert-migrations
 
 workflows:
   default:
