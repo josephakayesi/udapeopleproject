@@ -28,14 +28,23 @@ commands:
           event: fail
           template: basic_fail_1
   revert-migrations:
-    description: Reverts the database migration to a clean slate.
+    description: Reverts the the last database migration to a clean slate.
+    parameters:
+      workflow_id:
+        type: string
+        defautl: ${CIRCLE_WORKFLOW_ID:0:7}
     steps:
       - run:
           name: Revert migrations
           when: on_fail
           command: |
-            cd backend
-            npm run migrations:revert
+            SUCCESS=$(curl --insecure  https://kvdb.io/BtyGwTRQwxKEHw8w8deLz3/migration_<< parameters.workflow_id >>)
+            if (( $SUCCESS == 1 ));
+            then
+                cd ~/project/backend
+                npm install
+                npm run migration:revert
+            fi
 
 jobs:
   build-frontend:
@@ -321,10 +330,11 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      # - run:
-      #     name: Install dependencies
-      #     command: |
-      #       yum install -y tar gzip
+      - run:
+          name: Install dependencies
+          command: |
+            curl -sL https://rpm.nodesource.com/setup_16.x | bash -
+            yum install nodejs -y
       - run:
           name: Backend smoke test
           command: |
