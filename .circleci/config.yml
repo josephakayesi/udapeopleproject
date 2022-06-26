@@ -348,16 +348,6 @@ jobs:
             else
                 exit 1
             fi
-      # - run:
-      #     name: Backend smoke test.
-      #     command: |
-      #       echo "${API_URL}"
-      #       if curl "${API_URL}/api/status" | grep "ok"
-      #       then
-      #           exit 0
-      #       else
-      #           exit 1
-      #       fi
       - run:
           name: Frontend smoke test.
           command: |
@@ -365,14 +355,32 @@ jobs:
             echo ${URL}
             if curl -s ${URL} | grep "Welcome"
             then
-                # Change this to 0 after the job fails
-              exit 1
+              exit 0
             else
               exit 1
             fi
       - slack-notify
       - destroy_environment
       - revert-migrations
+
+  cloudfront-update:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          # name: Install dependencies
+          # command: |
+          #   curl -sL https://rpm.nodesource.com/setup_16.x | bash -
+          #   yum install nodejs -y
+      - run:
+          name: Update cloudfront distribution
+          command: |
+          aws cloudformation deploy \
+            --template-file .circleci/files/cloudfront.yml \
+            --stack-name InitialStack \
+            --parameter-overrides WorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
+            --tags project=udapeople
 
 workflows:
   default:
@@ -402,3 +410,5 @@ workflows:
           requires: [run-migrations]
       - smoke-test:
           requires: [deploy-backend, deploy-frontend]
+      - cloudfront-update:
+          requires: [smoke-test]
