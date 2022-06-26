@@ -212,6 +212,12 @@ jobs:
     steps:
       - checkout
       - run:
+        name: Install dependencies
+        command: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
+      - run:
           name: Run migrations
           command: |
             cd backend
@@ -228,6 +234,7 @@ jobs:
               curl https://kvdb.io/BtyGwTRQwxKEHw8w8deLz3/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
             fi
       - destroy_environment
+      - revert-migrations
 
   deploy-frontend:
     docker:
