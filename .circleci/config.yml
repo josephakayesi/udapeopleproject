@@ -368,11 +368,11 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - run:
-          # name: Install dependencies
-          # command: |
-          #   curl -sL https://rpm.nodesource.com/setup_16.x | bash -
-          #   yum install nodejs -y
+      # - run:
+      # name: Install dependencies
+      # command: |
+      #   curl -sL https://rpm.nodesource.com/setup_16.x | bash -
+      #   yum install nodejs -y
       - run:
           name: Update cloudfront distribution
           command: |
