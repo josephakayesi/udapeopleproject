@@ -380,18 +380,18 @@ jobs:
           name: Install dependencies
           command: |
             yum install tar gzip -y
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - project/OldWorkflowID.txt
       - run:
           name: Get old stack workflow id
           command: |
             export OldWorkflowID=$(aws cloudformation \
               list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
               --no-paginate --output text | tail -c 8)
-            echo OldWorkflowID >> OldWorkflowID.txt
+            echo OldWorkflowID >> ~/project/OldWorkflowID.txt
             cat OldWorkflowID.txt
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/OldWorkflowID.txt
       - run:
           name: Update cloudfront distribution
           command: |
