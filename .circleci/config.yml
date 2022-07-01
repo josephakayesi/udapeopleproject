@@ -377,8 +377,8 @@ jobs:
     steps:
       - checkout
       - run:
-        name: Install dependencies
-        command: |
+          name: Install dependencies
+          command: |
           yum install tar -y
       - persist_to_workspace:
           root: ~/
