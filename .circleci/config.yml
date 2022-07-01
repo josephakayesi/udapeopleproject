@@ -442,6 +442,8 @@ jobs:
       - run:
           name: Remove old stacks and files
           command: |
+            cat ~/project/OldWorkflowID.txt
+            export OldWorkflowID=$(cat ~/project/OldWorkflowID.txt)
             if [[ "${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkflowID}" ]]
             then
               echo "Delete old stack"
