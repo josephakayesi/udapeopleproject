@@ -9,6 +9,9 @@
   become: yes
   shell: |
     cd /home/ubuntu
+    mkdir app
+    mv backend.tar.gz app/backend.tar.gz
+    cd app
     tar xzvf backend.tar.gz 
     npm i 
     npm run build
