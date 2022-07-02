@@ -1,6 +1,5 @@
 ---
-
-- name: "configuration play." 
+- name: 'configuration play.'
   hosts: web
   user: ubuntu
   gather_facts: false
@@ -10,3 +9,4 @@
     - ansible_stdout_callback: yaml
   roles:
     - deploy
+    # - configure-prometheus-node-exporter
